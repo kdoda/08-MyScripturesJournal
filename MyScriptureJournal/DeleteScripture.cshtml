@@ -1,0 +1,76 @@
+﻿@{
+    Layout = null;
+    var book = "";
+    var chapter = "";
+    var verse = "";
+    var id = "";
+
+    if (!IsPost)
+    {
+        if (!Request.QueryString["ID"].IsEmpty() && Request.QueryString["ID"].IsInt())
+        {
+            id = Request.QueryString["ID"];
+            var db = Database.Open("Scriptures");
+            var dbCommand = "SELECT * FROM Scriptures WHERE ID = @0";
+            var row = db.QuerySingle(dbCommand, id);
+            if (row != null)
+            {
+                book = row.Book;
+                chapter = row.Chapter;
+                verse = row.Verse.ToString();
+            }
+            else
+            {
+                Validation.AddFormError("No Scripture was found for that ID.");
+            }
+        }
+        else
+        {
+            Validation.AddFormError("No Scripture was found for that ID.");
+        }
+    }
+
+    if (IsPost && !Request["buttonDelete"].IsEmpty())
+    {
+        id = Request.Form["id"];
+        var db = Database.Open("Scriptures");
+        var deleteCommand = "DELETE FROM Scriptures WHERE ID = @0";
+        db.Execute(deleteCommand, id);
+        Response.Redirect("~/Scriptures");
+    }
+}
+<html>
+<head>
+    <title>Delete a Scripture</title>
+</head>
+<body>
+    <h1>Delete a Scripture</h1>
+    @Html.ValidationSummary()
+    <p><a href="~/Scriptures">Return to scriptures listing</a></p>
+
+    <form method="post">
+        <fieldset>
+            <legend>Scripture Information</legend>
+
+            <p>
+                <span>Book:</span>
+                <span>@book</span>
+            </p>
+
+            <p>
+                <span>Chapter:</span>
+                <span>@chapter</span>
+            </p>
+
+            <p>
+                <span>Verse:</span>
+                <span>@verse</span>
+            </p>
+
+            <input type="hidden" name="id" value="@id" />
+            <p><input type="submit" name="buttonDelete" value="Delete Scripture" /></p>
+        </fieldset>
+        <p><a href="~/Scriptures">Return to scriptures listing</a></p>
+    </form>
+</body>
+</html>

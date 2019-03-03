@@ -1,0 +1,91 @@
+﻿@{
+    Layout = null;
+    var db = Database.Open("Scriptures");
+
+    var selectCommand = "SELECT * FROM Scriptures";
+    var searchTerm = "";
+
+    if (!Request.QueryString["searchBook"].IsEmpty())
+    {
+        selectCommand = "SELECT * FROM Scriptures WHERE Book = @0";
+        searchTerm = Request.QueryString["searchBook"];
+    }
+
+    if (!Request.QueryString["searchNote"].IsEmpty())
+    {
+        selectCommand = "SELECT * FROM Scriptures WHERE Note LIKE @0";
+        searchTerm = "%" + Request["searchNote"] + "%";
+    }
+
+    var selectedData = db.Query(selectCommand, searchTerm);
+    var grid = new WebGrid(source: selectedData, defaultSort: "Book", rowsPerPage: 5);
+}
+
+<!DOCTYPE html>
+
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <title>Scriptures</title>
+    <link href="//fonts.googleapis.com/css?family=Questrial" rel="stylesheet" type="text/css">
+    <style type="text/css">
+
+        .grid {
+            margin: 4px;
+            border-collapse: collapse;
+            width: 600px;
+        }
+
+            .grid th, .grid td {
+                border: 1px solid #C0C0C0;
+                padding: 5px;
+            }
+
+        .head {
+            background-color: #E8E8E8;
+            font-family: 'Questrial', sans-serif;
+            font-weight: bold;
+            color: #FFF;
+        }
+
+        .alt {
+            background-color: #E8E8E8;
+            color: #000;
+        }
+    </style>
+</head>
+<body>
+    <h1>Scriptures</h1>
+    <form method="get">
+        <p>
+            <a href="~/AddScripture">Add a scripture</a>
+        </p>
+        <div>
+            <label for="searchBook">Genre to look for:</label>
+            <input type="text" name="searchBook" value="@Request.QueryString["searchBook"]" />
+            <input type="Submit" value="Search Book" /><br />
+        </div>
+
+        <div>
+            <label for="searchNote">Note title contains the following:</label>
+            <input type="text" name="searchNote" value="@Request.QueryString["searchNote"]" />
+            <input type="Submit" value="Search Note" /><br />
+        </div>
+    </form>
+    <div>
+        @grid.GetHtml(
+            tableStyle: "grid",
+            headerStyle: "head",
+            alternatingRowStyle: "alt",
+            columns: grid.Columns(
+                grid.Column(format: @<a href="~/EditScripture?id=@item.ID">Edit</a>),
+                grid.Column("Book"),
+                grid.Column("Chapter", canSort: false),
+                grid.Column("Verse", canSort: false),
+                grid.Column("Date Added"),
+                grid.Column("Note", canSort: false),
+                grid.Column(format: @<a href="~/DeleteScripture?id=@item.ID">Delete</a>))
+            )
+    </div>
+</body>
+</html>   
