@@ -5,6 +5,7 @@
     var chapter = "";
     var verse = "";
     var id = "";
+    var note = "";
 
     if (!IsPost)
     {
@@ -20,6 +21,7 @@
                 book = row.Book;
                 chapter = row.Chapter;
                 verse = row.Verse.ToString();
+                note = row.Note;
             }
             else
             {
@@ -43,12 +45,13 @@
         chapter = Request.Form["chapter"];
         verse = Request.Form["verse"];
         id = Request.Form["id"];
+        note = Request.Form["note"];
 
         if (Validation.IsValid())
         {
             var db = Database.Open("Scriptures");
-            var updateCommand = "UPDATE Scriptures SET Book=@0, Chapter=@1, Verse=@2 WHERE Id=@3";
-            db.Execute(updateCommand, book, chapter, verse, id);
+            var updateCommand = "UPDATE Scriptures SET Book=@0, Chapter=@1, Verse=@2, Note=@3 WHERE Id=@4";
+            db.Execute(updateCommand, book, chapter, verse, note, id);
             Response.Redirect("~/Scriptures");
         }
     }
@@ -60,6 +63,8 @@
 <head>
     <meta charset="utf-8" />
     <title>Edit a Scripture</title>
+    <link href="https://fonts.googleapis.com/css?family=Cardo:400,700|Oswald" rel="stylesheet">
+    <link href="~/Styles.css" rel="stylesheet">
     <style>
         .validation-summary-errors {
             border: 2px dashed red;
@@ -70,32 +75,43 @@
     </style>
 </head>
 <body>
-    <h1>Edit a Scripture</h1>
-    @Html.ValidationSummary()
-    <form method="post">
-        <fieldset>
-            <legend>Scripture Information</legend>
+    <div id="content">
+        <!-- Using a nested DIV to set margin instead of setting padding
+        to #content onsubmit="validateForm()"-->
+        <div style="margin: 10%;">
+            <h1>Edit a Scripture</h1>
+            @Html.ValidationSummary()
+            <form method="post">
+                <p>
+                    <label for="book">Book:</label>
+                    <input type="text" name="book" value="@book" />
+                </p>
 
+                <p>
+                    <label for="genre">Chapter:</label>
+                    <input type="text" name="chapter" value="@chapter" />
+                </p>
+
+                <p>
+                    <label for="verse">Verse:</label>
+                    <input type="text" name="verse" value="@verse" />
+                </p>
+
+                <p>
+                    <label for="note">Note:</label>
+                    <input type="text" name="note" value="@note" />
+                </p>
+
+                <input type="hidden" name="id" value="@id" />
+
+                <p style="text-align: center;">
+                    <input class="button" type="submit" name="buttonSubmit" value="Submit Changes" />
+                </p>
+            </form>
             <p>
-                <label for="book">Book:</label>
-                <input type="text" name="book" value="@book" />
+                <a href="~/Scriptures">Return to scriptures listing</a>
             </p>
-
-            <p>
-                <label for="genre">Chapter:</label>
-                <input type="text" name="chapter" value="@chapter" />
-            </p>
-
-            <p>
-                <label for="verse">Verse:</label>
-                <input type="text" name="verse" value="@verse" />
-            </p>
-
-            <input type="hidden" name="id" value="@id" />
-
-            <p><input type="submit" name="buttonSubmit" value="Submit Changes" /></p>
-        </fieldset>
-    </form>
-    <p><a href="~/Scripture">Return to scriptures listing</a></p>
+        </div>
+    </div>
 </body>
 </html>

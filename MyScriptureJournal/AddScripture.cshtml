@@ -29,6 +29,8 @@
 <head>
     <meta charset="utf-8" />
     <title>Add a Scripture</title>
+    <link href="https://fonts.googleapis.com/css?family=Cardo:400,700|Oswald" rel="stylesheet">
+    <link href="~/Styles.css" rel="stylesheet">
     <style type="text/css">
         .field-validation-error {
             font-weight: bold;
@@ -46,36 +48,41 @@
     </style>
 </head>
 <body>
-    <h1>Add a Scripture</h1>
-    @Html.ValidationSummary()
-    <form method="post">
-        <fieldset>
-            <legend>Scripture Information</legend>
-            <p>
-                <label for="book">Book:</label>
-                <input type="text" name="book" value="@Request.Form["book"]" />
-                @Html.ValidationMessage("book")
-            </p>
+    <div id="content">
+        <!-- Using a nested DIV to set margin instead of setting padding
+        to #content onsubmit="validateForm()"-->
+        <div style="margin: 10%;">
+            <h1>Add Scripture</h1>
+            @Html.ValidationSummary()
+            <form method="post">
+                    <p>
+                        <label for="book">Book:</label>
+                        <input type="text" name="book" value="@Request.Form["book"]" />
+                        @Html.ValidationMessage("book")
+                    </p>
 
-            <p>
-                <label for="chapter">Chapter:</label>
-                <input type="text" name="chapter" value="@Request.Form["chapter"]" />
-                @Html.ValidationMessage("chapter")
-            </p>
+                    <p>
+                        <label for="chapter">Chapter:</label>
+                        <input type="text" name="chapter" value="@Request.Form["chapter"]" />
+                        @Html.ValidationMessage("chapter")
+                    </p>
 
-            <p>
-                <label for="verse">Verse:</label>
-                <input type="text" name="verse" value="@Request.Form["verse"]" />
-                @Html.ValidationMessage("verse")
-            </p>
+                    <p>
+                        <label for="verse">Verse:</label>
+                        <input type="text" name="verse" value="@Request.Form["verse"]" />
+                        @Html.ValidationMessage("verse")
+                    </p>
 
-            <p>
-                <label for="note">Note:</label>
-                <input type="text" name="note" value="@Request.Form["note"]" />
-            </p>
+                    <p>
+                        <label for="note">Note:</label>
+                        <input type="text" name="note" value="@Request.Form["note"]" />
+                    </p>
 
-            <p><input type="submit" name="buttonSubmit" value="Add Note" /></p>
-        </fieldset>
-    </form>
+                    <p style="text-align: center;">
+                        <input class="button" type="submit" name="buttonSubmit" value="Add Note" />
+                    </p>
+            </form>
+        </div>
+    </div>
 </body>
 </html>

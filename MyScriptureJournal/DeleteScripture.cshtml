@@ -4,6 +4,7 @@
     var chapter = "";
     var verse = "";
     var id = "";
+    var note = "";
 
     if (!IsPost)
     {
@@ -18,6 +19,7 @@
                 book = row.Book;
                 chapter = row.Chapter;
                 verse = row.Verse.ToString();
+                note = row.Note;
             }
             else
             {
@@ -42,35 +44,46 @@
 <html>
 <head>
     <title>Delete a Scripture</title>
+    <link href="https://fonts.googleapis.com/css?family=Cardo:400,700|Oswald" rel="stylesheet">
+    <link href="~/Styles.css" rel="stylesheet">
 </head>
 <body>
-    <h1>Delete a Scripture</h1>
-    @Html.ValidationSummary()
-    <p><a href="~/Scriptures">Return to scriptures listing</a></p>
+    <div id="content">
+        <!-- Using a nested DIV to set margin instead of setting padding
+        to #content onsubmit="validateForm()"-->
+        <div style="margin: 10%;">
+            <h1>Delete a Scripture</h1>
+            @Html.ValidationSummary()
+            <form method="post">
 
-    <form method="post">
-        <fieldset>
-            <legend>Scripture Information</legend>
+                <p>
+                    <span>Book:</span>
+                    <span>@book</span>
+                </p>
 
-            <p>
-                <span>Book:</span>
-                <span>@book</span>
-            </p>
+                <p>
+                    <span>Chapter:</span>
+                    <span>@chapter</span>
+                </p>
 
-            <p>
-                <span>Chapter:</span>
-                <span>@chapter</span>
-            </p>
+                <p>
+                    <span>Verse:</span>
+                    <span>@verse</span>
+                </p>
 
-            <p>
-                <span>Verse:</span>
-                <span>@verse</span>
-            </p>
+                <p>
+                    <span>Note:</span>
+                    <span>@note</span>
+                </p>
 
-            <input type="hidden" name="id" value="@id" />
-            <p><input type="submit" name="buttonDelete" value="Delete Scripture" /></p>
-        </fieldset>
-        <p><a href="~/Scriptures">Return to scriptures listing</a></p>
-    </form>
+                <input type="hidden" name="id" value="@id" />
+                <p style="text-align: center;">
+                    <input class="button" type="submit" name="buttonDelete" value="Delete Scripture" />
+                </p>
+
+                <p><a href="~/Scriptures">Return to scriptures listing</a></p>
+            </form>
+        </div>
+    </div>
 </body>
 </html>

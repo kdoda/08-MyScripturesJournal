@@ -27,65 +27,48 @@
 <head>
     <meta charset="utf-8" />
     <title>Scriptures</title>
+    <link href="https://fonts.googleapis.com/css?family=Cardo:400,700|Oswald" rel="stylesheet">
     <link href="//fonts.googleapis.com/css?family=Questrial" rel="stylesheet" type="text/css">
-    <style type="text/css">
-
-        .grid {
-            margin: 4px;
-            border-collapse: collapse;
-            width: 600px;
-        }
-
-            .grid th, .grid td {
-                border: 1px solid #C0C0C0;
-                padding: 5px;
-            }
-
-        .head {
-            background-color: #E8E8E8;
-            font-family: 'Questrial', sans-serif;
-            font-weight: bold;
-            color: #FFF;
-        }
-
-        .alt {
-            background-color: #E8E8E8;
-            color: #000;
-        }
-    </style>
+    <link href="~/Styles.css" rel="stylesheet">
 </head>
-<body>
-    <h1>Scriptures</h1>
-    <form method="get">
-        <p>
-            <a href="~/AddScripture">Add a scripture</a>
-        </p>
-        <div>
-            <label for="searchBook">Genre to look for:</label>
-            <input type="text" name="searchBook" value="@Request.QueryString["searchBook"]" />
-            <input type="Submit" value="Search Book" /><br />
-        </div>
+<body style="width: 60%;">
+    <div id="content">
+        <!-- Using a nested DIV to set margin instead of setting padding
+        to #content onsubmit="validateForm()"-->
+        <div style="margin: 10%;">
+            <h1>Scriptures</h1>
+            <form method="get">
+                <p>
+                    <a href="~/AddScripture">Add scripture</a>
+                </p>
+                <div style="margin-bottom: 1em">
+                    <label for="searchBook">Book to look for:</label>
+                    <input type="text" name="searchBook" value="@Request.QueryString["searchBook"]" />
+                    <input class="button" type="Submit" value="Search Book" /><br />
+                </div>
 
-        <div>
-            <label for="searchNote">Note title contains the following:</label>
-            <input type="text" name="searchNote" value="@Request.QueryString["searchNote"]" />
-            <input type="Submit" value="Search Note" /><br />
+                <div style="margin-bottom: 1em">
+                    <label for="searchNote">Note title contains the following:</label>
+                    <input type="text" name="searchNote" value="@Request.QueryString["searchNote"]" />
+                    <input class="button" type="Submit" value="Search Note" /><br />
+                </div>
+            </form>
+            <div>
+                @grid.GetHtml(
+                    tableStyle: "grid",
+                    headerStyle: "head",
+                    alternatingRowStyle: "alt",
+                    columns: grid.Columns(
+                                  grid.Column("Book"),
+                                  grid.Column("Chapter", canSort: false),
+                                  grid.Column("Verse", canSort: false),
+                                  grid.Column("Date Added"),
+                                  grid.Column("Note", canSort: false),
+                                  grid.Column(format: @<a href="~/EditScripture?id=@item.ID">Edit</a>),
+                                 grid.Column(format: @<a href="~/DeleteScripture?id=@item.ID">Delete</a>))
+                   )
+            </div>
         </div>
-    </form>
-    <div>
-        @grid.GetHtml(
-            tableStyle: "grid",
-            headerStyle: "head",
-            alternatingRowStyle: "alt",
-            columns: grid.Columns(
-                grid.Column(format: @<a href="~/EditScripture?id=@item.ID">Edit</a>),
-                grid.Column("Book"),
-                grid.Column("Chapter", canSort: false),
-                grid.Column("Verse", canSort: false),
-                grid.Column("Date Added"),
-                grid.Column("Note", canSort: false),
-                grid.Column(format: @<a href="~/DeleteScripture?id=@item.ID">Delete</a>))
-            )
     </div>
 </body>
 </html>   
